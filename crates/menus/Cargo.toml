@@ -1,0 +1,24 @@
+[package]
+name = "menus"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+readme = false
+description = "The core library used to manipulate menu data."
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+pmod = { version = "0.1", git = "https://github.com/Dasaav-dsv/pmod.git" }
+windows = { version = "0.54", features = [
+    "Win32_System_LibraryLoader",
+    "Win32_Foundation",
+    "Win32_System_Diagnostics",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_SystemServices"
+] }
+hudhook = "*"
+chrono = "*"
+pollster = "0.3"
+uuid = { version = "1.16.0", features = ["v4"] }

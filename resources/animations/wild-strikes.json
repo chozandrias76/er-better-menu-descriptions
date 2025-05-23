@@ -1,0 +1,1155 @@
+{
+  "attacks": [
+    "300000505",
+    "300700505",
+    "301100505",
+    "301300505",
+    "301400505"
+  ],
+  "cancelFrom": [
+    "WeaponArt",
+    "FastWeaponArt"
+  ],
+  "categories": [
+    "Wild Strikes"
+  ],
+  "events": {
+    "activeFrames": [
+      {
+        "params": {
+          "AtkParamID": [
+            "300000505",
+            "300700505",
+            "301100505",
+            "301300505",
+            "301400505"
+          ],
+          "AttackIndex": 0,
+          "AttackType": 0,
+          "Attacks": [
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Standard",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 133.65,
+              "poiseDamageMV": 90,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301401805,
+                "bulletId": null,
+                "key": "300000505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 12,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Bastard Sword",
+                "Forked Greatsword",
+                "Iron Greatsword",
+                "Lordsworn's Greatsword",
+                "Knight's Greatsword",
+                "Flamberge",
+                "Banished Knight's Greatsword",
+                "Claymore",
+                "Gargoyle's Greatsword",
+                "Lizard Greatsword",
+                "Dismounter",
+                "Omen Cleaver",
+                "Monk's Flameblade",
+                "Beastman's Cleaver",
+                "Freyja's Greatsword",
+                "Large Club",
+                "Greathorn Hammer",
+                "Battle Hammer",
+                "Great Mace",
+                "Curved Great Club",
+                "Celebrant's Skull",
+                "Pickaxe",
+                "Great Stars",
+                "Brick Hammer",
+                "Rotten Battle Hammer",
+                "Smithscript Greathammer",
+                "Black Steel Greathammer",
+                "Greataxe",
+                "Great Omenkiller Cleaver",
+                "Crescent Moon Axe",
+                "Longhaft Axe",
+                "Rusted Anchor",
+                "Executioner's Greataxe",
+                "Butchering Knife",
+                "Gargoyle's Great Axe"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Slash",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 135,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "300700505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Falchion",
+                "Beastman's Curved Sword",
+                "Shotel",
+                "Shamshir",
+                "Bandit's Curved Sword",
+                "Flowing Curved Sword",
+                "Scavenger's Curved Sword",
+                "Serpent-God's Curved Sword",
+                "Mantis Blade",
+                "Scimitar",
+                "Grossmesser"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Strike",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 175.50000000000003,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301100505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Mace",
+                "Club",
+                "Curved Club",
+                "Warpick",
+                "Morning Star",
+                "Spiked Club",
+                "Hammer",
+                "Monk's Flamemace",
+                "Stone Club"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Strike",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 162,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301300505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Nightrider Flail",
+                "Flail",
+                "Chainlink Flail"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Standard",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 135,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301400505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Battle Axe",
+                "Forked Hatchet",
+                "Hand Axe",
+                "Jawbone Axe",
+                "Iron Cleaver",
+                "Ripple Blade",
+                "Celebrant's Cleaver",
+                "Highland Axe",
+                "Sacrificial Axe",
+                "Smithscript Axe",
+                "Messmer Soldier's Axe",
+                "Warped Axe"
+              ]
+            }
+          ],
+          "BehaviorJudgeID": 3505
+        },
+        "range": [
+          5,
+          8
+        ],
+        "type": "Attack"
+      },
+      {
+        "params": {
+          "AtkParamID": [
+            "300000505",
+            "300700505",
+            "301100505",
+            "301300505",
+            "301400505"
+          ],
+          "AttackIndex": 0,
+          "AttackType": 0,
+          "Attacks": [
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Standard",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 133.65,
+              "poiseDamageMV": 90,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301401805,
+                "bulletId": null,
+                "key": "300000505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 12,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Bastard Sword",
+                "Forked Greatsword",
+                "Iron Greatsword",
+                "Lordsworn's Greatsword",
+                "Knight's Greatsword",
+                "Flamberge",
+                "Banished Knight's Greatsword",
+                "Claymore",
+                "Gargoyle's Greatsword",
+                "Lizard Greatsword",
+                "Dismounter",
+                "Omen Cleaver",
+                "Monk's Flameblade",
+                "Beastman's Cleaver",
+                "Freyja's Greatsword",
+                "Large Club",
+                "Greathorn Hammer",
+                "Battle Hammer",
+                "Great Mace",
+                "Curved Great Club",
+                "Celebrant's Skull",
+                "Pickaxe",
+                "Great Stars",
+                "Brick Hammer",
+                "Rotten Battle Hammer",
+                "Smithscript Greathammer",
+                "Black Steel Greathammer",
+                "Greataxe",
+                "Great Omenkiller Cleaver",
+                "Crescent Moon Axe",
+                "Longhaft Axe",
+                "Rusted Anchor",
+                "Executioner's Greataxe",
+                "Butchering Knife",
+                "Gargoyle's Great Axe"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Slash",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 135,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "300700505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Falchion",
+                "Beastman's Curved Sword",
+                "Shotel",
+                "Shamshir",
+                "Bandit's Curved Sword",
+                "Flowing Curved Sword",
+                "Scavenger's Curved Sword",
+                "Serpent-God's Curved Sword",
+                "Mantis Blade",
+                "Scimitar",
+                "Grossmesser"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Strike",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 175.50000000000003,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301100505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Mace",
+                "Club",
+                "Curved Club",
+                "Warpick",
+                "Morning Star",
+                "Spiked Club",
+                "Hammer",
+                "Monk's Flamemace",
+                "Stone Club"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Strike",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 162,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301300505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Nightrider Flail",
+                "Flail",
+                "Chainlink Flail"
+              ]
+            },
+            {
+              "atkBehaviorIds": [
+                0,
+                0
+              ],
+              "bloodBuildup": 0,
+              "buffMV": 100,
+              "curseBuildup": 0,
+              "damageLevel": 1,
+              "fireDamageFlat": 0,
+              "fireDamageMV": 50,
+              "fireDamageRateFinal": 0.8,
+              "frostBuildup": 0,
+              "holyDamageFlat": 0,
+              "holyDamageMV": 50,
+              "holyDamageRateFinal": 0.8,
+              "lightningDamageFlat": 0,
+              "lightningDamageMV": 50,
+              "lightningDamageRateFinal": 0.8,
+              "madnessBuildup": 0,
+              "magicDamageFlat": 0,
+              "magicDamageMV": 50,
+              "magicDamageRateFinal": 0.8,
+              "name": "",
+              "physAttribute": "Standard",
+              "physDamageRateFinal": 0.8,
+              "physicalDamageFlat": 0,
+              "physicalDamageMV": 50,
+              "poiseDamageFlat": 135,
+              "poiseDamageMV": 100,
+              "poisonBuidup": 0,
+              "refs": {
+                "atkParamId": 301400805,
+                "bulletId": null,
+                "key": "301400505",
+                "spEffectIds": [
+                  6903
+                ]
+              },
+              "saDamageRateFinal": 2.7,
+              "scarletRotBuidup": 0,
+              "shieldChip": 0,
+              "sleepBuildup": 0,
+              "staminaCost": 7,
+              "staminaCostCharged": 0,
+              "statusMV": 100,
+              "weaponSkills": [],
+              "weapons": [
+                "Battle Axe",
+                "Forked Hatchet",
+                "Hand Axe",
+                "Jawbone Axe",
+                "Iron Cleaver",
+                "Ripple Blade",
+                "Celebrant's Cleaver",
+                "Highland Axe",
+                "Sacrificial Axe",
+                "Smithscript Axe",
+                "Messmer Soldier's Axe",
+                "Warped Axe"
+              ]
+            }
+          ],
+          "BehaviorJudgeID": 3505
+        },
+        "range": [
+          24,
+          27
+        ],
+        "type": "Attack"
+      }
+    ],
+    "blend": [
+      [
+        0,
+        6
+      ]
+    ],
+    "canBeParried": [
+      [
+        5,
+        7
+      ],
+      [
+        24,
+        25
+      ]
+    ],
+    "cancels": [
+      {
+        "range": {
+          "Regular": [
+            0,
+            41
+          ]
+        },
+        "type": "RightAttack"
+      },
+      {
+        "range": {
+          "Regular": [
+            0,
+            3
+          ]
+        },
+        "type": "Dodge"
+      },
+      {
+        "range": {
+          "Regular": [
+            13,
+            19
+          ]
+        },
+        "type": "Dodge"
+      },
+      {
+        "range": {
+          "Regular": [
+            29,
+            35
+          ]
+        },
+        "type": "Dodge"
+      }
+    ],
+    "hyperArmour": [
+      {
+        "id": 168,
+        "range": [
+          0,
+          41
+        ]
+      }
+    ],
+    "spEffects": [
+      {
+        "id": 100160,
+        "range": [
+          0,
+          41
+        ]
+      },
+      {
+        "id": 100420,
+        "mp": true,
+        "range": [
+          0,
+          177
+        ]
+      },
+      {
+        "id": 100540,
+        "range": [
+          9,
+          24
+        ]
+      }
+    ]
+  },
+  "filename": "a610_040056",
+  "hash": "4e379127915fef40459fda58ff10303f1dfce438",
+  "id": "040056",
+  "labels": [
+    "Attack",
+    "HyperArmour",
+    "Parriable",
+    "Multihit",
+    "WeaponSkill"
+  ],
+  "motionCategory": 610,
+  "name": "Wild Strikes",
+  "section": "a610",
+  "users": [
+    {
+      "id": 3000000,
+      "name": "Bastard Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3010000,
+      "name": "Forked Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3020000,
+      "name": "Iron Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3030000,
+      "name": "Lordsworn's Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3040000,
+      "name": "Knight's Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3050000,
+      "name": "Flamberge",
+      "type": "Weapon"
+    },
+    {
+      "id": 3080000,
+      "name": "Banished Knight's Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3180000,
+      "name": "Claymore",
+      "type": "Weapon"
+    },
+    {
+      "id": 3190000,
+      "name": "Gargoyle's Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 3520000,
+      "name": "Lizard Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7000000,
+      "name": "Falchion",
+      "type": "Weapon"
+    },
+    {
+      "id": 7010000,
+      "name": "Beastman's Curved Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7020000,
+      "name": "Shotel",
+      "type": "Weapon"
+    },
+    {
+      "id": 7030000,
+      "name": "Shamshir",
+      "type": "Weapon"
+    },
+    {
+      "id": 7040000,
+      "name": "Bandit's Curved Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7060000,
+      "name": "Flowing Curved Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7080000,
+      "name": "Scavenger's Curved Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7110000,
+      "name": "Serpent-God's Curved Sword",
+      "type": "Weapon"
+    },
+    {
+      "id": 7120000,
+      "name": "Mantis Blade",
+      "type": "Weapon"
+    },
+    {
+      "id": 7140000,
+      "name": "Scimitar",
+      "type": "Weapon"
+    },
+    {
+      "id": 7150000,
+      "name": "Grossmesser",
+      "type": "Weapon"
+    },
+    {
+      "id": 8020000,
+      "name": "Dismounter",
+      "type": "Weapon"
+    },
+    {
+      "id": 8060000,
+      "name": "Omen Cleaver",
+      "type": "Weapon"
+    },
+    {
+      "id": 8070000,
+      "name": "Monk's Flameblade",
+      "type": "Weapon"
+    },
+    {
+      "id": 8080000,
+      "name": "Beastman's Cleaver",
+      "type": "Weapon"
+    },
+    {
+      "id": 8510000,
+      "name": "Freyja's Greatsword",
+      "type": "Weapon"
+    },
+    {
+      "id": 11000000,
+      "name": "Mace",
+      "type": "Weapon"
+    },
+    {
+      "id": 11010000,
+      "name": "Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 11030000,
+      "name": "Curved Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 11040000,
+      "name": "Warpick",
+      "type": "Weapon"
+    },
+    {
+      "id": 11050000,
+      "name": "Morning Star",
+      "type": "Weapon"
+    },
+    {
+      "id": 11070000,
+      "name": "Spiked Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 11080000,
+      "name": "Hammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 11090000,
+      "name": "Monk's Flamemace",
+      "type": "Weapon"
+    },
+    {
+      "id": 11140000,
+      "name": "Stone Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 12000000,
+      "name": "Large Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 12010000,
+      "name": "Greathorn Hammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 12020000,
+      "name": "Battle Hammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 12060000,
+      "name": "Great Mace",
+      "type": "Weapon"
+    },
+    {
+      "id": 12080000,
+      "name": "Curved Great Club",
+      "type": "Weapon"
+    },
+    {
+      "id": 12130000,
+      "name": "Celebrant's Skull",
+      "type": "Weapon"
+    },
+    {
+      "id": 12140000,
+      "name": "Pickaxe",
+      "type": "Weapon"
+    },
+    {
+      "id": 12180000,
+      "name": "Great Stars",
+      "type": "Weapon"
+    },
+    {
+      "id": 12190000,
+      "name": "Brick Hammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 12210000,
+      "name": "Rotten Battle Hammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 12500000,
+      "name": "Smithscript Greathammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 12520000,
+      "name": "Black Steel Greathammer",
+      "type": "Weapon"
+    },
+    {
+      "id": 13000000,
+      "name": "Nightrider Flail",
+      "type": "Weapon"
+    },
+    {
+      "id": 13010000,
+      "name": "Flail",
+      "type": "Weapon"
+    },
+    {
+      "id": 13040000,
+      "name": "Chainlink Flail",
+      "type": "Weapon"
+    },
+    {
+      "id": 14000000,
+      "name": "Battle Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14010000,
+      "name": "Forked Hatchet",
+      "type": "Weapon"
+    },
+    {
+      "id": 14020000,
+      "name": "Hand Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14030000,
+      "name": "Jawbone Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14040000,
+      "name": "Iron Cleaver",
+      "type": "Weapon"
+    },
+    {
+      "id": 14050000,
+      "name": "Ripple Blade",
+      "type": "Weapon"
+    },
+    {
+      "id": 14060000,
+      "name": "Celebrant's Cleaver",
+      "type": "Weapon"
+    },
+    {
+      "id": 14100000,
+      "name": "Highland Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14110000,
+      "name": "Sacrificial Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14500000,
+      "name": "Smithscript Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 14520000,
+      "name": "Messmer Soldier's Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15000000,
+      "name": "Greataxe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15010000,
+      "name": "Warped Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15020000,
+      "name": "Great Omenkiller Cleaver",
+      "type": "Weapon"
+    },
+    {
+      "id": 15030000,
+      "name": "Crescent Moon Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15050000,
+      "name": "Longhaft Axe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15060000,
+      "name": "Rusted Anchor",
+      "type": "Weapon"
+    },
+    {
+      "id": 15080000,
+      "name": "Executioner's Greataxe",
+      "type": "Weapon"
+    },
+    {
+      "id": 15120000,
+      "name": "Butchering Knife",
+      "type": "Weapon"
+    },
+    {
+      "id": 15130000,
+      "name": "Gargoyle's Great Axe",
+      "type": "Weapon"
+    }
+  ],
+  "version": "1.14.1"
+}

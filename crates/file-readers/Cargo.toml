@@ -1,0 +1,11 @@
+[package]
+name = "file-readers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+readme = false
+
+[dependencies]
+serde = {version = "*" }
+serde_json = "*"
+quick-xml = {version = "0.37.5", features = ["serde", "serde-types", "serialize"]}

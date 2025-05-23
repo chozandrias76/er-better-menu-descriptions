@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = ["crates/file-readers", "crates/menus"]
+
+[workspace.package]
+name = "er-menu-mod"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+opt-level = "z"
+
+[workspace.lints.rust]
+
+[workspace.lints.rustdoc]
+
+[workspace.lints.clippy]
