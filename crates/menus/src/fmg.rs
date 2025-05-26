@@ -128,3 +128,9 @@ pub enum FmgCategories {
     TutorialTitleDlc02 = 475,
     TutorialBodyDlc02 = 476,
 }
+
+impl FmgCategories {
+    pub fn into(self) -> u32 {
+        self as u32
+    }
+}

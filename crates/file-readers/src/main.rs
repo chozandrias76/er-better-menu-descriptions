@@ -60,6 +60,32 @@ pub fn main() {
                             let file_to_write = path_to_write.clone().join(format!("wild-strikes.{second_key}.json"));
                             let mut file = File::create(&file_to_write).unwrap();
                             file.write_all(serde_json::to_string_pretty(single).unwrap().as_bytes()).unwrap();
+                            let third_key = "activeFrames";
+                            let activeframes = single.get(third_key);
+                            let mut activeframes_nav = Navigator::new(&activeframes.unwrap().to_string());
+                            let result = activeframes_nav.find_by_key_and_matching_sibling_key_value_pair(
+                                "range",
+                                "type",
+                                "Attack",
+                                true,
+                                true
+                            );
+                            match result {
+                                MatchResult::Single(single) | MatchResult::SingleExact(single) => {
+                                    println!("Single match");
+                                    let file_to_write = path_to_write.clone().join(format!("wild-strikes.{second_key}.{third_key}.json"));
+                                    let mut file = File::create(&file_to_write).unwrap();
+                                    file.write_all(serde_json::to_string_pretty(single).unwrap().as_bytes()).unwrap();
+                                },
+                                MatchResult::Keys(keys) => println!("Multiple matches"),
+                                MatchResult::All(all) => {
+                                    println!("All matches");
+                                    let file_to_write = path_to_write.clone().join(format!("wild-strikes.{second_key}.{third_key}.json"));
+                                    let mut file = File::create(&file_to_write).unwrap();
+                                    file.write_all(serde_json::to_string_pretty(&all).unwrap().as_bytes()).unwrap();
+                                },
+                                MatchResult::None => println!("No match for activeframes"),
+                            }
                         }
                     }
                 }

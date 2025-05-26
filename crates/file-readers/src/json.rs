@@ -29,6 +29,54 @@ impl Navigator {
         Self { data, index: 0 }
     }
 
+    pub fn find_by_key_and_matching_sibling_key_value_pair(
+        &self,
+        key: &str,
+        sibling_key: &str,
+        sibling_value: &str,
+        return_all: bool,
+        exact: bool,
+    ) -> MatchResult {
+        let mut matches = Vec::new();
+        match &self.data {
+            Data::Vec(vec) => {
+                for item in vec {
+                    if let Some(val) = item.get(key) {
+                        if let Some(sibling_val) = item.get(sibling_key) {
+                            if let Some(s) = sibling_val.as_str() {
+                                if s == sibling_value && exact {
+                                        matches.push(val);
+                                }
+                                else if s.contains(sibling_value) {
+                                    matches.push(val);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Data::Value(val) => {
+                matches.push(val.as_object().unwrap().get(key).unwrap());
+            }
+        }
+
+        if matches.is_empty() {
+            return MatchResult::None;
+        }
+        match matches.len() {
+            0 => MatchResult::None,
+            1 => MatchResult::Single(matches[0]),
+            _ if return_all => MatchResult::All(matches),
+            _ => {
+                let keys = matches
+                    .iter()
+                    .filter_map(|item| item.get(key)?.as_str().map(|s| s.to_string()))
+                    .collect();
+                MatchResult::Keys(keys)
+            }
+        }
+    }
+
     pub fn find_by_key_value_adv(
         &self,
         key: &str,

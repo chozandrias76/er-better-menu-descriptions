@@ -1,3 +1,4 @@
+use crate::fmg::FmgCategories;
 use hudhook::imgui::{Condition, Context, Ui};
 use hudhook::{ImguiRenderLoop, RenderContext};
 use pmod::fmg::MsgRepository;
@@ -8,17 +9,24 @@ pub struct HookGui {
     unhook_triggered: Arc<Mutex<bool>>,
     unhook_fn: Arc<dyn Fn() + Send + Sync>,
     pub window_open: Arc<Mutex<bool>>,
+    pub replacement_msg_ptr: Arc<Mutex<Vec<u16>>>,
 }
 
 impl HookGui {
-    pub fn new(unhook_fn: impl Fn() + Send + Sync + 'static) -> Self {
+    pub fn new(
+        replacement_msg_ptr: Arc<Mutex<Vec<u16>>>,
+        unhook_fn: impl Fn() + Send + Sync + 'static,
+    ) -> Self {
         Self {
             unhook_triggered: Arc::new(Mutex::new(false)),
             unhook_fn: Arc::new(unhook_fn),
             window_open: Arc::new(Mutex::new(false)),
+            replacement_msg_ptr,
         }
     }
 }
+
+const WILD_STRIKES_ID: u32 = 110;
 
 impl ImguiRenderLoop for HookGui {
     fn before_render<'a>(
@@ -60,10 +68,15 @@ impl ImguiRenderLoop for HookGui {
                     }
 
                     ui.separator();
-                    let a = MsgRepository::get_msg(0, 0x2b, 110);
-                    if let Some(d) = a {
-                        ui.text(format!("{:?}", d));
-                    }
+
+                    MsgRepository::replace_msg(
+                        0,
+                        FmgCategories::ArtsCaption.into(),
+                        WILD_STRIKES_ID,
+                        std::ptr::NonNull::new(
+                            self.replacement_msg_ptr.lock().unwrap().as_mut_ptr(),
+                        ),
+                    );
                 });
         }
     }
