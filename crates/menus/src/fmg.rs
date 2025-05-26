@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FmgCategories {
     TalkMsg = 1,
     BloodMsg = 2,
