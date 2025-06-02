@@ -1,6 +1,4 @@
-use serde_json::{
-    Value, from_str,
-};
+use serde_json::{Value, from_str};
 
 #[allow(dead_code)]
 pub enum MatchResult<'a> {
@@ -11,9 +9,7 @@ pub enum MatchResult<'a> {
     None,
 }
 
-#[derive(
-    serde::Deserialize,
-)]
+#[derive(serde::Deserialize)]
 #[allow(dead_code)]
 pub enum Data {
     Vec(Vec<Value>),
@@ -28,9 +24,7 @@ pub struct Navigator {
 
 #[allow(dead_code, unused)]
 impl Navigator {
-    pub fn new(
-        json: &str,
-    ) -> Self {
+    pub fn new(json: &str) -> Self {
         let parsed: Value = from_str(json).expect("Invalid JSON");
         let data = match parsed {
             Value::Array(arr) => Data::Vec(arr),
@@ -50,15 +44,10 @@ impl Navigator {
         return_all: bool,
         exact: bool,
     ) -> MatchResult {
-        let mut matches =
-            Vec::new();
+        let mut matches = Vec::new();
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => {
-                for item in
-                    vec
-                {
+            Data::Vec(vec) => {
+                for item in vec {
                     if let Some(val) = item.get(key) {
                         if let Some(sibling_val) = item.get(sibling_key) {
                             if let Some(s) = sibling_val.as_str() {
@@ -72,15 +61,12 @@ impl Navigator {
                     }
                 }
             }
-            Data::Value(
-                val,
-            ) => {
+            Data::Value(val) => {
                 matches.push(val.as_object().unwrap().get(key).unwrap());
             }
         }
 
-        if matches.is_empty()
-        {
+        if matches.is_empty() {
             return MatchResult::None;
         }
         match matches.len() {
@@ -90,7 +76,9 @@ impl Navigator {
             _ => {
                 let keys = matches
                     .iter()
-                    .filter_map(|item| item.get(key)?.as_str().map(|s| s.to_string()))
+                    .filter_map(|item| {
+                        item.get(key)?.as_str().map(|s| s.to_string())
+                    })
                     .collect();
                 MatchResult::Keys(keys)
             }
@@ -104,15 +92,10 @@ impl Navigator {
         return_all: bool,
         exact: bool,
     ) -> MatchResult {
-        let mut matches =
-            Vec::new();
+        let mut matches = Vec::new();
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => {
-                for item in
-                    vec
-                {
+            Data::Vec(vec) => {
+                for item in vec {
                     if let Some(val) = item.get(key) {
                         let val_str = match val {
                             Value::String(s) => s.to_lowercase(),
@@ -134,9 +117,7 @@ impl Navigator {
                     }
                 }
             }
-            Data::Value(
-                val,
-            ) => {
+            Data::Value(val) => {
                 matches.push(val.as_object().unwrap().get(key).unwrap());
             }
         }
@@ -148,64 +129,42 @@ impl Navigator {
             _ => {
                 let keys = matches
                     .iter()
-                    .filter_map(|item| item.get(key)?.as_str().map(|s| s.to_string()))
+                    .filter_map(|item| {
+                        item.get(key)?.as_str().map(|s| s.to_string())
+                    })
                     .collect();
                 MatchResult::Keys(keys)
             }
         }
     }
 
-    pub fn current(
-        &self,
-    ) -> Option<&Value> {
+    pub fn current(&self) -> Option<&Value> {
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => vec.get(
-                self.index,
-            ),
-            Data::Value(
-                val,
-            ) => Some(val),
+            Data::Vec(vec) => vec.get(self.index),
+            Data::Value(val) => Some(val),
         }
     }
 
-    pub fn next(
-        &mut self,
-    ) -> Option<&Value> {
+    pub fn next(&mut self) -> Option<&Value> {
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => {
-                if self.index
-                    + 1
-                    < vec
-                        .len()
-                {
+            Data::Vec(vec) => {
+                if self.index + 1 < vec.len() {
                     self.index += 1;
                 }
                 self.current()
             }
-            Data::Value(
-                _,
-            ) => None,
+            Data::Value(_) => None,
         }
     }
 
-    pub fn prev(
-        &mut self,
-    ) -> Option<&Value> {
+    pub fn prev(&mut self) -> Option<&Value> {
         if self.index > 0 {
             self.index -= 1;
         }
         self.current()
     }
 
-    pub fn find_by_key_value(
-        &self,
-        key: &str,
-        val: &str,
-    ) -> Option<&Value> {
+    pub fn find_by_key_value(&self, key: &str, val: &str) -> Option<&Value> {
         match &self.data {
             Data::Vec(vec) => vec.iter().find(|item| {
                 if let Some(v) = item.get(key) {
@@ -219,18 +178,10 @@ impl Navigator {
         }
     }
 
-    pub fn find_nested(
-        &self,
-        path: &[&str],
-        target: &str,
-    ) -> Option<&Value> {
+    pub fn find_nested(&self, path: &[&str], target: &str) -> Option<&Value> {
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => {
-                for item in
-                    vec
-                {
+            Data::Vec(vec) => {
+                for item in vec {
                     if let Some(val) = item.get(path[0]) {
                         if path.len() == 1 {
                             if let Some(s) = val.as_str() {
@@ -244,7 +195,10 @@ impl Navigator {
                                 data: Data::Value(nested_val),
                                 index: 0,
                             };
-                            if navigator.find_nested(&path[1..], target).is_some() {
+                            if navigator
+                                .find_nested(&path[1..], target)
+                                .is_some()
+                            {
                                 return Some(item);
                             }
                         }
@@ -252,45 +206,27 @@ impl Navigator {
                 }
                 None
             }
-            Data::Value(
-                _,
-            ) => None,
+            Data::Value(_) => None,
         }
     }
-    pub fn jump_to(
-        &mut self,
-        idx: usize,
-    ) -> Option<&Value> {
+    pub fn jump_to(&mut self, idx: usize) -> Option<&Value> {
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => {
-                if idx
-                    < vec
-                        .len()
-                {
+            Data::Vec(vec) => {
+                if idx < vec.len() {
                     self.index = idx;
                     Some(&vec[idx])
                 } else {
                     None
                 }
             }
-            Data::Value(
-                _,
-            ) => None,
+            Data::Value(_) => None,
         }
     }
 
-    pub fn len(
-        &self,
-    ) -> usize {
+    pub fn len(&self) -> usize {
         match &self.data {
-            Data::Vec(
-                vec,
-            ) => vec.len(),
-            Data::Value(
-                _,
-            ) => 1,
+            Data::Vec(vec) => vec.len(),
+            Data::Value(_) => 1,
         }
     }
 }

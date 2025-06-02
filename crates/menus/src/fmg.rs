@@ -1,11 +1,5 @@
 #[allow(dead_code)]
-#[derive(
-    Debug,
-    Clone,
-    Copy,
-    PartialEq,
-    Eq,
-)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FmgCategories {
     TalkMsg = 1,
     BloodMsg = 2,
@@ -43,27 +37,23 @@ pub enum FmgCategories {
     GrMenuText = 200,
     GrLineHelp = 201,
     GrKeyGuide = 202,
-    GrSystemMessageWin64 =
-        203,
+    GrSystemMessageWin64 = 203,
     GrDialogues = 204,
     LoadingTitle = 205,
     LoadingText = 206,
     TutorialTitle = 207,
     TutorialBody = 208,
-    TextEmbedImageNameWin64 =
-        209,
+    TextEmbedImageNameWin64 = 209,
     ToSWin64 = 210,
     WeaponNameDlc01 = 310,
     WeaponInfoDlc01 = 311,
     WeaponCaptionDlc01 = 312,
     ProtectorNameDlc01 = 313,
     ProtectorInfoDlc01 = 314,
-    ProtectorCaptionDlc01 =
-        315,
+    ProtectorCaptionDlc01 = 315,
     AccessoryNameDlc01 = 316,
     AccessoryInfoDlc01 = 317,
-    AccessoryCaptionDlc01 =
-        318,
+    AccessoryCaptionDlc01 = 318,
     GoodsNameDlc01 = 319,
     GoodsInfoDlc01 = 320,
     GoodsCaptionDlc01 = 321,
@@ -85,17 +75,13 @@ pub enum FmgCategories {
     BloodMsgDlc01 = 361,
     MovieSubtitleDlc01 = 362,
     NetworkMessageDlc01 = 364,
-    ActionButtonTextDlc01 =
-        365,
-    EventTextForTalkDlc01 =
-        366,
-    EventTextForMapDlc01 =
-        367,
+    ActionButtonTextDlc01 = 365,
+    EventTextForTalkDlc01 = 366,
+    EventTextForMapDlc01 = 367,
     GrMenuTextDlc01 = 368,
     GrLineHelpDlc01 = 369,
     GrKeyGuideDlc01 = 370,
-    GrSystemMessageWin64Dlc01 =
-        371,
+    GrSystemMessageWin64Dlc01 = 371,
     GrDialoguesDlc01 = 372,
     LoadingTitleDlc01 = 373,
     LoadingTextDlc01 = 374,
@@ -106,12 +92,10 @@ pub enum FmgCategories {
     WeaponCaptionDlc02 = 412,
     ProtectorNameDlc02 = 413,
     ProtectorInfoDlc02 = 414,
-    ProtectorCaptionDlc02 =
-        415,
+    ProtectorCaptionDlc02 = 415,
     AccessoryNameDlc02 = 416,
     AccessoryInfoDlc02 = 417,
-    AccessoryCaptionDlc02 =
-        418,
+    AccessoryCaptionDlc02 = 418,
     GoodsNameDlc02 = 419,
     GoodsInfoDlc02 = 420,
     GoodsCaptionDlc02 = 421,
@@ -133,17 +117,13 @@ pub enum FmgCategories {
     BloodMsgDlc02 = 461,
     MovieSubtitleDlc02 = 462,
     NetworkMessageDlc02 = 464,
-    ActionButtonTextDlc02 =
-        465,
-    EventTextForTalkDlc02 =
-        466,
-    EventTextForMapDlc02 =
-        467,
+    ActionButtonTextDlc02 = 465,
+    EventTextForTalkDlc02 = 466,
+    EventTextForMapDlc02 = 467,
     GrMenuTextDlc02 = 468,
     GrLineHelpDlc02 = 469,
     GrKeyGuideDlc02 = 470,
-    GrSystemMessageWin64Dlc02 =
-        471,
+    GrSystemMessageWin64Dlc02 = 471,
     GrDialoguesDlc02 = 472,
     LoadingTitleDlc02 = 473,
     LoadingTextDlc02 = 474,

@@ -1,16 +1,9 @@
 use crate::MessageReplacements;
-use hudhook::imgui::{
-    Condition, Context, Ui,
-};
-use hudhook::{
-    ImguiRenderLoop,
-    RenderContext,
-};
+use hudhook::imgui::{Condition, Context, Ui};
+use hudhook::{ImguiRenderLoop, RenderContext};
 use last_weapon::WeaponData;
 use pmod::fmg::MsgRepository;
-use std::sync::atomic::{
-    AtomicUsize, Ordering,
-};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone)]
@@ -25,10 +18,7 @@ impl HookGui {
     pub fn new(
         message_replacements: Arc<MessageReplacements>,
         last_weapon_data_ptr: AtomicUsize,
-        unhook_fn: impl Fn()
-        + Send
-        + Sync
-        + 'static,
+        unhook_fn: impl Fn() + Send + Sync + 'static,
     ) -> Self {
         Self {
             last_weapon_data_ptr: Arc::new(last_weapon_data_ptr),
@@ -40,32 +30,21 @@ impl HookGui {
     }
 }
 
-impl ImguiRenderLoop
-    for HookGui
-{
+impl ImguiRenderLoop for HookGui {
     fn before_render<'a>(
         &'a mut self,
         ctx: &mut Context,
         _render_context: &'a mut dyn RenderContext,
     ) {
-        let open = self
-            .window_open
-            .lock()
-            .unwrap();
+        let open = self.window_open.lock().unwrap();
         let io = ctx.io_mut();
         io.mouse_draw_cursor = *open;
         io.want_capture_mouse = *open;
         io.want_set_mouse_pos = *open;
     }
 
-    fn render(
-        &mut self,
-        ui: &mut Ui,
-    ) {
-        let mut open = self
-            .window_open
-            .lock()
-            .unwrap();
+    fn render(&mut self, ui: &mut Ui) {
+        let mut open = self.window_open.lock().unwrap();
 
         ui.main_menu_bar(|| {
             ui.menu_with_enabled("Hook GUI", true, || {
@@ -77,8 +56,7 @@ impl ImguiRenderLoop
         });
 
         if *open {
-            let gui_size =
-                [100.0, 25.0]; // Default size for the GUI
+            let gui_size = [100.0, 25.0]; // Default size for the GUI
             ui.window("ER Menus")
                 .size(gui_size, Condition::FirstUseEver)
                 .build(|| {
@@ -94,17 +72,24 @@ impl ImguiRenderLoop
                     ui.separator();
                     let pointer_at_last_weapon_data_ptr = unsafe {
                         std::ptr::read(
-                            self.last_weapon_data_ptr.load(Ordering::Relaxed) as *const usize
+                            self.last_weapon_data_ptr.load(Ordering::Relaxed)
+                                as *const usize,
                         )
                     };
                     let mut address: [u8; 8] = [0u8; 8];
-                    address.copy_from_slice(&pointer_at_last_weapon_data_ptr.to_le_bytes()[..8]);
+                    address.copy_from_slice(
+                        &pointer_at_last_weapon_data_ptr.to_le_bytes()[..8],
+                    );
                     let last_weapon_ptr = usize::from_le_bytes(address);
-                    ui.text(format!("Last Weapon Data Ptr 0x{:X}", last_weapon_ptr));
+                    ui.text(format!(
+                        "Last Weapon Data Ptr 0x{:X}",
+                        last_weapon_ptr
+                    ));
                     // Use Serde and WeaponData to read the bytes at the last_weapon_ptr as a WeaponData struct
                     if last_weapon_ptr != 0 {
-                        let weapon_data: WeaponData =
-                            unsafe { std::ptr::read(last_weapon_ptr as *const WeaponData) };
+                        let weapon_data: WeaponData = unsafe {
+                            std::ptr::read(last_weapon_ptr as *const WeaponData)
+                        };
 
                         ui.text(format!(
                             "Last Weapon Data {}: {:#}",
@@ -122,7 +107,10 @@ impl ImguiRenderLoop
                             *category as u32,
                             *id,
                             std::ptr::NonNull::new(
-                                replacement_msg_ptr.lock().unwrap().as_mut_ptr(),
+                                replacement_msg_ptr
+                                    .lock()
+                                    .unwrap()
+                                    .as_mut_ptr(),
                             ),
                         );
                     }

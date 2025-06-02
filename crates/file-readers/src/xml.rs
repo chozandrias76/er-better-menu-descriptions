@@ -7,11 +7,8 @@ pub fn main() {
                 <tag2><!--Test comment-->Test</tag2>
                 <tag2>Test 2</tag2>
              </tag1>"#;
-    let mut reader =
-        Reader::from_str(xml);
-    reader
-        .config_mut()
-        .trim_text(true);
+    let mut reader = Reader::from_str(xml);
+    reader.config_mut().trim_text(true);
 
     let mut count = 0;
     let mut txt = Vec::new();
@@ -23,14 +20,18 @@ pub fn main() {
         // when the input is a &str or a &[u8], we don't actually need to use another
         // buffer, we could directly call `reader.read_event()`
         match reader.read_event_into(&mut buf) {
-            Err(e) => panic!("Error at position {}: {:?}", reader.error_position(), e),
+            Err(e) => {
+                panic!("Error at position {}: {:?}", reader.error_position(), e)
+            }
             // exits the loop when reaching end of file
             Ok(Event::Eof) => break,
 
             Ok(Event::Start(e)) => match e.name().as_ref() {
                 b"tag1" => println!(
                     "attributes values: {:?}",
-                    e.attributes().map(|a| a.unwrap().value).collect::<Vec<_>>()
+                    e.attributes()
+                        .map(|a| a.unwrap().value)
+                        .collect::<Vec<_>>()
                 ),
                 b"tag2" => count += 1,
                 _ => (),
