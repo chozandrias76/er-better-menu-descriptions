@@ -1,5 +1,6 @@
-use serde_json::{from_str, Value};
+use serde_json::{Value, from_str};
 
+#[allow(dead_code)]
 pub enum MatchResult<'a> {
     SingleExact(&'a Value),
     Single(&'a Value),
@@ -9,16 +10,19 @@ pub enum MatchResult<'a> {
 }
 
 #[derive(serde::Deserialize)]
+#[allow(dead_code)]
 pub enum Data {
     Vec(Vec<Value>),
     Value(Value),
 }
 
+#[allow(dead_code)]
 pub struct Navigator {
     data: Data,
     index: usize,
 }
 
+#[allow(dead_code, unused)]
 impl Navigator {
     pub fn new(json: &str) -> Self {
         let parsed: Value = from_str(json).expect("Invalid JSON");
@@ -44,10 +48,9 @@ impl Navigator {
                     if let Some(val) = item.get(key) {
                         if let Some(sibling_val) = item.get(sibling_key) {
                             if let Some(s) = sibling_val.as_str() {
-                                if s == sibling_value && exact {
-                                        matches.push(val);
-                                }
-                                else if s.contains(sibling_value) {
+                                if (s == sibling_value && exact)
+                                    || (!exact && s.contains(sibling_value))
+                                {
                                     matches.push(val);
                                 }
                             }
@@ -185,7 +188,7 @@ impl Navigator {
                                 data: Data::Value(nested_val),
                                 index: 0,
                             };
-                            if let Some(_) = navigator.find_nested(&path[1..], target) {
+                            if navigator.find_nested(&path[1..], target).is_some() {
                                 return Some(item);
                             }
                         }

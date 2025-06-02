@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FmgCategories {
     TalkMsg = 1,
@@ -128,10 +129,4 @@ pub enum FmgCategories {
     LoadingTextDlc02 = 474,
     TutorialTitleDlc02 = 475,
     TutorialBodyDlc02 = 476,
-}
-
-impl FmgCategories {
-    pub fn into(self) -> u32 {
-        self as u32
-    }
 }

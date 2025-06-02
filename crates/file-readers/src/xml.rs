@@ -1,6 +1,7 @@
 use quick_xml::events::Event;
 use quick_xml::reader::Reader;
 
+#[allow(unused)]
 pub fn main() {
     let xml = r#"<tag1 att1 = "test">
                 <tag2><!--Test comment-->Test</tag2>

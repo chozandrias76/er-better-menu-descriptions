@@ -1,7 +1,9 @@
-use crate::fmg::FmgCategories;
+use crate::MessageReplacements;
 use hudhook::imgui::{Condition, Context, Ui};
 use hudhook::{ImguiRenderLoop, RenderContext};
+use last_weapon::WeaponData;
 use pmod::fmg::MsgRepository;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone)]
@@ -9,14 +11,17 @@ pub struct HookGui {
     unhook_triggered: Arc<Mutex<bool>>,
     unhook_fn: Arc<dyn Fn() + Send + Sync>,
     pub window_open: Arc<Mutex<bool>>,
-    pub message_replacements: Arc<Mutex<Vec<(FmgCategories, u32, Arc<Mutex<Vec<u16>>>)>>>,
+    pub message_replacements: Arc<MessageReplacements>,
+    pub last_weapon_data_ptr: Arc<AtomicUsize>,
 }
 impl HookGui {
     pub fn new(
-        message_replacements: Arc<Mutex<Vec<(FmgCategories, u32, Arc<Mutex<Vec<u16>>>)>>>,
+        message_replacements: Arc<MessageReplacements>,
+        last_weapon_data_ptr: AtomicUsize,
         unhook_fn: impl Fn() + Send + Sync + 'static,
     ) -> Self {
         Self {
+            last_weapon_data_ptr: Arc::new(last_weapon_data_ptr),
             unhook_triggered: Arc::new(Mutex::new(false)),
             unhook_fn: Arc::new(unhook_fn),
             window_open: Arc::new(Mutex::new(false)),
@@ -65,10 +70,31 @@ impl ImguiRenderLoop for HookGui {
                     }
 
                     ui.separator();
+                    let pointer_at_last_weapon_data_ptr = unsafe {
+                        std::ptr::read(
+                            self.last_weapon_data_ptr.load(Ordering::Relaxed) as *const usize
+                        )
+                    };
+                    let mut address: [u8; 8] = [0u8; 8];
+                    address.copy_from_slice(&pointer_at_last_weapon_data_ptr.to_le_bytes()[..8]);
+                    let last_weapon_ptr = usize::from_le_bytes(address);
+                    ui.text(format!("Last Weapon Data Ptr 0x{:X}", last_weapon_ptr));
+                    // Use Serde and WeaponData to read the bytes at the last_weapon_ptr as a WeaponData struct
+                    if last_weapon_ptr != 0 {
+                        let weapon_data: WeaponData =
+                            unsafe { std::ptr::read(last_weapon_ptr as *const WeaponData) };
+
+                        ui.text(format!(
+                            "Last Weapon Data {}: {:#}",
+                            weapon_data.name(),
+                            weapon_data
+                        ));
+                    } else {
+                        ui.text("No last weapon data available.");
+                    }
                     for (category, id, replacement_msg_ptr) in
                         self.message_replacements.lock().unwrap().iter()
                     {
-
                         MsgRepository::replace_msg(
                             0,
                             *category as u32,
@@ -80,4 +106,5 @@ impl ImguiRenderLoop for HookGui {
                     }
                 });
         }
-    }}
+    }
+}
