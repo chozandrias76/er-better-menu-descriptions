@@ -1,70 +1,159 @@
 use iced_x86::code_asm::*;
-use iced_x86::{Decoder, DecoderOptions, Formatter, Instruction, NasmFormatter};
+use iced_x86::{
+    Decoder, DecoderOptions,
+    Formatter, Instruction,
+    NasmFormatter,
+};
 use std::error::Error;
 
 const HEXBYTES_COLUMN_BYTE_LENGTH: usize = 10;
+const ARCHITECTURE_BITNESS:
+    u32 = 64;
 
-pub fn build_hook_sequence(
-    rip_addr: Option<usize>,
-) -> Result<(isize, Vec<u8>), Box<dyn Error + Send + Sync>> {
-    let mut a = CodeAssembler::new(64)?;
-    let rip_addr = rip_addr.unwrap_or(0x13FE00000);
+const EXPECTED_INSTRUCTION_BYTES: [u8; 25] = [
+    0x48, 0x89, 0x5, 0xa, 0, 0, 0, 0xf3, 0xf, 0x10, 0x70, 0x10, 0xe9, 0x51, 0x4, 0x9c, 0, 0, 0, 0,
+    0, 0, 0, 0, 0,
+];
+
+pub fn record_rax_trampoline_data_with_data_ptr(
+    start_addr: Option<usize>,
+    return_addr: Option<
+        usize,
+    >,
+) -> Result<
+    (isize, Vec<u8>),
+    Box<
+        dyn Error
+            + Send
+            + Sync,
+    >,
+> {
+    let mut a =
+        CodeAssembler::new(
+            64,
+        )?;
+    let rip_addr = start_addr
+        .unwrap_or(
+            0x13FE00000,
+        );
     // Absolute return address (where execution resumes)
-    let return_addr: i64 = 0x1407c0462;
+    let return_addr: usize =
+        return_addr
+            .unwrap_or(
+                0x1407c0462,
+            );
 
     // Create a label for data
-    let mut some_offset = a.create_label();
+    let mut some_offset =
+        a.create_label();
 
     // mov [rip+some_offset], rax
-    a.mov(ptr(some_offset), rax)?; // Write the value of rax to the address at some_offset
+    a.mov(
+        ptr(some_offset),
+        rax,
+    )?; // Write the value of rax to the address at some_offset
 
     // movss xmm6, [rax + 0x10]
-    a.movss(xmm6, dword_ptr(rax + 0x10))?; // Should probably copy actual bytes next time
+    a.movss(
+        xmm6,
+        dword_ptr(rax + 0x10),
+    )?; // Should probably copy actual bytes next time
 
-    a.jmp(return_addr as u64)?;
+    a.jmp(
+        return_addr as u64,
+    )?;
 
     // dq 0 at some_offset
-    a.set_label(&mut some_offset)?;
+    a.set_label(
+        &mut some_offset,
+    )?;
     a.dq(&[0])?;
 
-    let vec_bytes = a.assemble(rip_addr as u64)?;
+    let vec_bytes = a
+        .assemble(
+            rip_addr as u64,
+        )?;
+
+    assert_eq!(
+        vec_bytes, EXPECTED_INSTRUCTION_BYTES,
+        "Assembled bytes do not match expected bytes: {:?}",
+        vec_bytes
+    );
+    Ok((17isize, vec_bytes))
+}
+
+pub fn print_bytes_as_instructions(
+    vec_bytes: Vec<u8>,
+    start_addr: usize,
+) {
     let mut decoder = Decoder::with_ip(
-        64,
+        ARCHITECTURE_BITNESS,
         vec_bytes.as_slice(),
-        rip_addr as u64,
+        start_addr as u64,
         DecoderOptions::NONE,
     );
-    let mut formatter = NasmFormatter::new();
-    let mut output = String::new();
-    let mut instruction = Instruction::default();
-
-    while decoder.can_decode() {
+    let mut formatter =
+        NasmFormatter::new();
+    let mut output =
+        String::new();
+    let mut instruction =
+        Instruction::default(
+        );
+    let mut output_bytes =
+        Vec::with_capacity(
+            vec_bytes.len()
+                + 1,
+        );
+    while decoder.can_decode()
+    {
         // There's also a decode() method that returns an instruction but that also
         // means it copies an instruction (40 bytes):
         //     instruction = decoder.decode();
-        decoder.decode_out(&mut instruction);
+        decoder.decode_out(
+            &mut instruction,
+        );
 
         // Format the instruction ("disassemble" it)
         output.clear();
-        formatter.format(&instruction, &mut output);
+        formatter.format(
+            &instruction,
+            &mut output,
+        );
 
         // Eg. "00007FFAC46ACDB2 488DAC2400FFFFFF     lea       rbp,[rsp-100h]"
-        print!("{:016X} ", instruction.ip());
+        print!(
+            "{:016X} ",
+            instruction.ip()
+        );
         // Get the address pointed to by the mov instruction at the very start
-        let rip_addr = instruction.ip() as usize;
-        let start_index = (instruction.ip() - (rip_addr as u64)) as usize;
+        let rip_addr =
+            instruction.ip()
+                as usize;
+        let start_index =
+            (instruction.ip()
+                - (rip_addr
+                    as u64))
+                as usize;
         let instr_bytes = &vec_bytes[start_index..start_index + instruction.len()];
-        for b in instr_bytes.iter() {
-            print!("{:02X}", b);
+        for b in
+            instr_bytes.iter()
+        {
+            print!(
+                "{:02X}",
+                b
+            );
         }
         if instr_bytes.len() < HEXBYTES_COLUMN_BYTE_LENGTH {
             for _ in 0..HEXBYTES_COLUMN_BYTE_LENGTH - instr_bytes.len() {
                 print!("  ");
             }
         }
-        println!(" {}", output);
+        output_bytes.extend_from_slice(instr_bytes);
+        println!(
+            " {}",
+            output
+        );
     }
-    Ok((17isize, vec_bytes))
 }
 
 #[cfg(test)]
@@ -72,10 +161,19 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_build_hook_sequence() {
-        let result = build_hook_sequence(None);
-        assert!(result.is_ok());
-        let bytes = result.unwrap();
-        assert!(!bytes.1.is_empty(), "Generated bytes should not be empty");
+    fn test_build_hook_sequence()
+     {
+        let result = record_rax_trampoline_data_with_data_ptr(None, None);
+        assert!(
+            result.is_ok()
+        );
+        let bytes =
+            result.unwrap();
+        assert!(
+            !bytes
+                .1
+                .is_empty(),
+            "Generated bytes should not be empty"
+        );
     }
 }

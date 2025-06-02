@@ -1,17 +1,30 @@
-use crate::json::{MatchResult, Navigator};
+use crate::json::{
+    MatchResult, Navigator,
+};
 use std::io::Write;
 use std::path::Path;
-use std::{fs::File, io::Read};
+use std::{
+    fs::File, io::Read,
+};
 
 mod json;
 mod xml;
 
 pub fn main() {
-    let path = Path::new(env!("CARGO_MANIFEST_DIR"));
-    let path = path.parent().unwrap().parent().unwrap();
+    let path = Path::new(
+        env!(
+            "CARGO_MANIFEST_DIR"
+        ),
+    );
+    let path = path
+        .parent()
+        .unwrap()
+        .parent()
+        .unwrap();
     let path = path.join("resources\\animations.json");
 
-    let file = File::open(&path);
+    let file =
+        File::open(&path);
     match file {
         Ok(mut file) => {
             let mut data: String = String::new();
@@ -19,11 +32,15 @@ pub fn main() {
                 println!("Read to string error:  {}", e)
             };
             let nav = Navigator::new(&data);
-            let mut path_to_write = path.clone();
+            let mut
+            path_to_write =
+                path.clone();
             path_to_write.set_extension("");
             // Make the directory
             // Check for it first
-            if !path_to_write.exists() {
+            if !path_to_write
+                .exists()
+            {
                 std::fs::create_dir(&path_to_write).unwrap();
             }
             match nav.find_by_key_value_adv("name", Some("Wild Strikes"), false, true) {
@@ -110,7 +127,11 @@ pub fn main() {
             }
         }
         Err(_) => {
-            panic!("Could not read path {}", path.display())
+            panic!(
+                "Could not read path {}",
+                path.display(
+                )
+            )
         }
     }
 }

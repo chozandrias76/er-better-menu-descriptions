@@ -7,8 +7,11 @@ pub fn main() {
                 <tag2><!--Test comment-->Test</tag2>
                 <tag2>Test 2</tag2>
              </tag1>"#;
-    let mut reader = Reader::from_str(xml);
-    reader.config_mut().trim_text(true);
+    let mut reader =
+        Reader::from_str(xml);
+    reader
+        .config_mut()
+        .trim_text(true);
 
     let mut count = 0;
     let mut txt = Vec::new();

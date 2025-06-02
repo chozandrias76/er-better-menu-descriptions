@@ -1,9 +1,16 @@
 use crate::MessageReplacements;
-use hudhook::imgui::{Condition, Context, Ui};
-use hudhook::{ImguiRenderLoop, RenderContext};
+use hudhook::imgui::{
+    Condition, Context, Ui,
+};
+use hudhook::{
+    ImguiRenderLoop,
+    RenderContext,
+};
 use last_weapon::WeaponData;
 use pmod::fmg::MsgRepository;
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{
+    AtomicUsize, Ordering,
+};
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone)]
@@ -18,7 +25,10 @@ impl HookGui {
     pub fn new(
         message_replacements: Arc<MessageReplacements>,
         last_weapon_data_ptr: AtomicUsize,
-        unhook_fn: impl Fn() + Send + Sync + 'static,
+        unhook_fn: impl Fn()
+        + Send
+        + Sync
+        + 'static,
     ) -> Self {
         Self {
             last_weapon_data_ptr: Arc::new(last_weapon_data_ptr),
@@ -30,21 +40,32 @@ impl HookGui {
     }
 }
 
-impl ImguiRenderLoop for HookGui {
+impl ImguiRenderLoop
+    for HookGui
+{
     fn before_render<'a>(
         &'a mut self,
         ctx: &mut Context,
         _render_context: &'a mut dyn RenderContext,
     ) {
-        let open = self.window_open.lock().unwrap();
+        let open = self
+            .window_open
+            .lock()
+            .unwrap();
         let io = ctx.io_mut();
         io.mouse_draw_cursor = *open;
         io.want_capture_mouse = *open;
         io.want_set_mouse_pos = *open;
     }
 
-    fn render(&mut self, ui: &mut Ui) {
-        let mut open = self.window_open.lock().unwrap();
+    fn render(
+        &mut self,
+        ui: &mut Ui,
+    ) {
+        let mut open = self
+            .window_open
+            .lock()
+            .unwrap();
 
         ui.main_menu_bar(|| {
             ui.menu_with_enabled("Hook GUI", true, || {
@@ -56,7 +77,8 @@ impl ImguiRenderLoop for HookGui {
         });
 
         if *open {
-            let gui_size = [800.0, 600.0]; // Default size for the GUI
+            let gui_size =
+                [100.0, 25.0]; // Default size for the GUI
             ui.window("ER Menus")
                 .size(gui_size, Condition::FirstUseEver)
                 .build(|| {
