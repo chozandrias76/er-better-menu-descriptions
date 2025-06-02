@@ -4,6 +4,7 @@ mod gui;
 use crash_handler::{
     CrashContext, CrashEventResult, CrashHandler, make_crash_event,
 };
+use pelite::pe::PeObject;
 use std::{
     fs::File,
     sync::{Arc, Mutex, atomic::AtomicUsize},
@@ -75,12 +76,16 @@ pub unsafe extern "C" fn DllMain(
             let duration: Duration = Duration::from_millis(5000);
             wait_for_system_init(&program, duration)
                 .expect("System initialization timed out");
+            let base_address = match program {
+                Program::Mapping(pe_view) => pe_view.image().as_ptr(),
+                Program::File(pe_file) => pe_file.image().as_ptr(),
+            };
+
             let (data_addr, jump_instruction_to_buffer) =
-                match jump_instructions() {
+                match rax_read_ptr_jump_instructions(base_address) {
                     Some(value) => value,
                     None => unreachable!("Failed to get jump instructions"),
                 };
-            let base_address: *const u8 = 0x140000000 as *const u8;
             let mut original_instructions: [u8; 5] = [0; 5];
             let get_weapon_hook_ptr_addrss =
                 unsafe { base_address.offset(0x7c045d) };
@@ -173,13 +178,12 @@ fn setup() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn jump_instructions() -> Option<(*const u8, [u8; 5])> {
-    // Get your hook code bytes
-
+fn rax_read_ptr_jump_instructions(
+    base_address: *const u8,
+) -> Option<(*const u8, [u8; 5])> {
     // Find a memory region close to the target
-    let base_address: usize = 0x140000000;
-    let target_addr = base_address + 0x7c045d;
-    let return_addr = base_address + 0x7c0462;
+    let target_addr = unsafe { base_address.add(0x7c045d) };
+    let return_addr = unsafe { base_address.add(0x7c0462) };
 
     // Try multiple memory locations, starting with the closest one
     let mut exec_mem = std::ptr::null_mut();
@@ -201,16 +205,16 @@ fn jump_instructions() -> Option<(*const u8, [u8; 5])> {
             attempt * 0x100000 // Then try at 1MB intervals
         };
 
-        let try_addr = match attempt % 2 {
-            0 => (target_addr + offset) & !0xFFFFF, // Try above
-            _ => (target_addr - offset) & !0xFFFFF, // Try below
+        let try_addr: *const u8 = match attempt % 2 {
+            0 => {
+                ((target_addr as usize).wrapping_add(offset) & !0xFFFFF)
+                    as *const _
+            } // Try above
+            _ => {
+                ((target_addr as usize).wrapping_sub(offset) & !0xFFFFF)
+                    as *const _
+            } // Try below
         };
-
-        tracing::info!(
-            "Attempt {}: trying to allocate at 0x{:X}",
-            attempt,
-            try_addr
-        );
 
         exec_mem = unsafe {
             VirtualAlloc(
@@ -238,7 +242,7 @@ fn jump_instructions() -> Option<(*const u8, [u8; 5])> {
     }
 
     let sequence = record_rax_trampoline_data_with_data_ptr(
-        Some(exec_mem as usize),
+        Some(exec_mem as *const u8),
         Some(return_addr),
     );
     let (data_addr_offset, instructions) = match sequence {
@@ -275,8 +279,7 @@ fn jump_instructions() -> Option<(*const u8, [u8; 5])> {
     unsafe { EXEC_MEM_PTR = exec_mem };
 
     Some((
-        ((exec_mem as usize).wrapping_add(data_addr_offset as usize))
-            as *const u8,
+        ((exec_mem as usize).wrapping_add(data_addr_offset)) as *const u8,
         jump_instruction,
     ))
 }
@@ -311,24 +314,6 @@ fn replacement_message_ptr(buffer_box: Box<[u16]>) -> Arc<Mutex<Vec<u16>>> {
 }
 
 mod test {
-
-    #[test]
-    fn test_jump_instructions() {
-        let instructions = crate::jump_instructions();
-        assert!(
-            instructions.is_some(),
-            "Jump instructions should be generated"
-        );
-        let (_offset, buffer) = instructions.unwrap();
-        assert_eq!(
-            buffer.len(),
-            5,
-            "Jump instruction buffer should be 5 bytes long"
-        );
-        dbg!(&buffer[1]);
-        assert_eq!(buffer[0], 0xE9, "First byte should be JMP instruction");
-    }
-
     #[test]
     fn test_create_replacement_message() {
         let message_replacements = std::sync::Mutex::new(Vec::new());

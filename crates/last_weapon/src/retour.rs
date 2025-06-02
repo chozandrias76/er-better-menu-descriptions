@@ -13,13 +13,13 @@ const EXPECTED_INSTRUCTION_BYTES: [u8; 25] = [
 ];
 
 pub fn record_rax_trampoline_data_with_data_ptr(
-    start_addr: Option<usize>,
-    return_addr: Option<usize>,
-) -> Result<(isize, Vec<u8>), Box<dyn Error + Send + Sync>> {
+    start_addr: Option<*const u8>,
+    return_addr: Option<*const u8>,
+) -> Result<(usize, Vec<u8>), Box<dyn Error + Send + Sync>> {
     let mut a = CodeAssembler::new(64)?;
-    let rip_addr = start_addr.unwrap_or(0x13FE00000);
+    let rip_addr = start_addr.unwrap_or(0x13FE00000 as *const u8);
     // Absolute return address (where execution resumes)
-    let return_addr: usize = return_addr.unwrap_or(0x1407c0462);
+    let return_addr = return_addr.unwrap_or(0x1407c0462 as *const u8);
 
     // Create a label for data
     let mut some_offset = a.create_label();
@@ -43,7 +43,7 @@ pub fn record_rax_trampoline_data_with_data_ptr(
         "Assembled bytes do not match expected bytes: {:?}",
         vec_bytes
     );
-    Ok((17isize, vec_bytes))
+    Ok((17usize, vec_bytes))
 }
 
 pub fn print_bytes_as_instructions(vec_bytes: Vec<u8>, start_addr: usize) {
