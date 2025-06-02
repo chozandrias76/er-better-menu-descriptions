@@ -59,82 +59,121 @@ pub unsafe extern "C" fn DllMain(
     _: *mut std::ffi::c_void,
 ) {
     if reason == windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH {
-        setup().unwrap();
+        init_logging_and_crash_handler().unwrap();
         let program: Program<'_> = Program::current();
 
-        let message_replacements: MessageReplacements = Mutex::new(Vec::new());
-
-        let message_replacements = create_replacement_message(
-            message_replacements,
-            FmgCategories::ArtsCaption,
-            WILD_STRIKES_ID,
-        );
-        let message_replacements = Arc::new(message_replacements);
+        let message_replacements = setup_message_replacements();
 
         std::thread::spawn(move || {
-            tracing::info!("Running new thread for hook setup");
-            let duration: Duration = Duration::from_millis(5000);
-            wait_for_system_init(&program, duration)
-                .expect("System initialization timed out");
-            let base_address = match program {
-                Program::Mapping(pe_view) => pe_view.image().as_ptr(),
-                Program::File(pe_file) => pe_file.image().as_ptr(),
-            };
-
-            let (data_addr, jump_instruction_to_buffer) =
-                match rax_read_ptr_jump_instructions(base_address) {
-                    Some(value) => value,
-                    None => unreachable!("Failed to get jump instructions"),
-                };
-            let mut original_instructions: [u8; 5] = [0; 5];
-            let get_weapon_hook_ptr_addrss =
-                unsafe { base_address.offset(0x7c045d) };
-            // Replace the 5 byte instruction at the address with a jump to our hook
-            let get_weapon_hook_ptr = get_weapon_hook_ptr_addrss as *mut u8;
-            unsafe {
-                tracing::info!(
-                    "Weapon hook pointer address: {:?}",
-                    get_weapon_hook_ptr
-                );
-
-                // Write the jump instruction to the address
-                for (i, &byte) in jump_instruction_to_buffer.iter().enumerate()
-                {
-                    original_instructions[i] = *get_weapon_hook_ptr.add(i);
-                    *get_weapon_hook_ptr.add(i) = byte;
-                }
-            };
-            let arc_wrapped_ptr = Arc::new(Mutex::new(PtrWrapper(
-                get_weapon_hook_ptr_addrss as _,
-            )));
-            let atomic_usize_data_addr = AtomicUsize::new(data_addr as usize);
-            let arc_wrapped_ptr_clone = arc_wrapped_ptr.clone();
-            let gui = HookGui::new(
+            let (original_instructions, get_weapon_hook, data_address) =
+                prepare_hook_context(program);
+            build_gui_instance(
+                hmodule,
                 message_replacements,
-                atomic_usize_data_addr,
-                move || {
-                    unsafe {
-                        let _ = unhook(
-                            &arc_wrapped_ptr_clone,
-                            original_instructions,
-                        );
-                    };
-                },
+                original_instructions,
+                get_weapon_hook,
+                data_address,
             );
-
-            let result = hudhook::Hudhook::builder()
-                .with::<ImguiDx12Hooks>(gui)
-                .with_hmodule(hmodule)
-                .build()
-                .apply();
-
-            if let Err(_e) = result {
-                unsafe {
-                    let _ = unhook(&arc_wrapped_ptr, original_instructions);
-                };
-            }
         });
     }
+}
+
+fn prepare_hook_context(
+    program: Program<'_>,
+) -> ([u8; 5], Arc<Mutex<PtrWrapper>>, AtomicUsize) {
+    let (write_data_addr, original_instructions, get_weapon_hook) =
+        initialize_program_jump_hook(program);
+    let atomic_usize_data_addr = AtomicUsize::new(write_data_addr as usize);
+    (original_instructions, get_weapon_hook, atomic_usize_data_addr)
+}
+
+fn build_gui_instance(
+    hmodule: HINSTANCE,
+    message_replacements: Arc<MessageReplacements>,
+    original_instructions: [u8; 5],
+    get_weapon_hook: Arc<Mutex<PtrWrapper>>,
+    weapon_data_address: AtomicUsize,
+) {
+    let get_weapon_hook_copy = get_weapon_hook.clone();
+    let gui =
+        HookGui::new(message_replacements, weapon_data_address, move || {
+            unsafe {
+                let _ = unhook(&get_weapon_hook, original_instructions);
+            };
+        });
+
+    let result = hudhook::Hudhook::builder()
+        .with::<ImguiDx12Hooks>(gui)
+        .with_hmodule(hmodule)
+        .build()
+        .apply();
+
+    if let Err(_e) = result {
+        unsafe {
+            let _ = unhook(&get_weapon_hook_copy, original_instructions);
+        };
+    }
+}
+
+fn setup_message_replacements() -> Arc<MessageReplacements> {
+    let message_replacements: MessageReplacements = Mutex::new(Vec::new());
+
+    let message_replacements = create_replacement_message(
+        message_replacements,
+        FmgCategories::ArtsCaption,
+        WILD_STRIKES_ID,
+    );
+    Arc::new(message_replacements)
+}
+
+fn initialize_program_jump_hook(
+    program: Program<'_>,
+) -> (*const u8, [u8; 5], Arc<Mutex<PtrWrapper>>) {
+    tracing::info!("Running new thread for hook setup");
+    let duration: Duration = Duration::from_millis(5000);
+    wait_for_system_init(&program, duration)
+        .expect("System initialization timed out");
+    let base_address = match program {
+        Program::Mapping(pe_view) => pe_view.image().as_ptr(),
+        Program::File(pe_file) => pe_file.image().as_ptr(),
+    };
+
+    let (write_data_addr, jump_instruction_to_buffer) =
+        match rax_read_ptr_jump_instructions(base_address) {
+            Some(value) => value,
+            None => unreachable!("Failed to get jump instructions"),
+        };
+    let (original_instructions, get_weapon_hook) =
+        replace_instructions_with_jump(
+            base_address,
+            jump_instruction_to_buffer,
+        );
+    (write_data_addr, original_instructions, get_weapon_hook)
+}
+
+fn replace_instructions_with_jump(
+    base_address: *const u8,
+    jump_instruction_to_buffer: [u8; 5],
+) -> ([u8; 5], Arc<Mutex<PtrWrapper>>) {
+    let mut original_instructions: [u8; 5] = [0; 5];
+    let get_weapon_hook_ptr_address = unsafe { base_address.offset(0x7c045d) };
+    // Replace the 5 byte instruction at the address with a jump to our hook
+    let get_weapon_hook_ptr = get_weapon_hook_ptr_address as *mut u8;
+    unsafe {
+        tracing::info!(
+            "Weapon hook pointer address: {:?}",
+            get_weapon_hook_ptr
+        );
+
+        // Write the jump instruction to the address
+        for (i, &byte) in jump_instruction_to_buffer.iter().enumerate() {
+            original_instructions[i] = *get_weapon_hook_ptr.add(i);
+            *get_weapon_hook_ptr.add(i) = byte;
+        }
+    };
+    let get_weapon_hook =
+        Arc::new(Mutex::new(PtrWrapper(get_weapon_hook_ptr_address as _)));
+    (original_instructions, get_weapon_hook)
 }
 
 unsafe fn unhook(
@@ -148,16 +187,15 @@ unsafe fn unhook(
     Ok(())
 }
 
-fn setup() -> Result<(), Box<dyn std::error::Error>> {
-    let log_file = File::create("./er_menu_mod.log")?;
-    let subscriber =
-        tracing_subscriber::fmt().with_writer(Mutex::new(log_file)).finish();
-    tracing::subscriber::set_global_default(subscriber)?;
+fn init_logging_and_crash_handler() -> Result<(), Box<dyn std::error::Error>> {
+    init_logging()?;
 
-    std::panic::set_hook(Box::new(|panic_info| {
-        tracing::error!("Application panicked: {}", panic_info);
-    }));
+    init_crash_handler();
 
+    Ok(())
+}
+
+fn init_crash_handler() {
     #[allow(unsafe_code)]
     let handler = CrashHandler::attach(unsafe {
         make_crash_event(move |context: &CrashContext| {
@@ -174,7 +212,16 @@ fn setup() -> Result<(), Box<dyn std::error::Error>> {
     })
     .unwrap();
     std::mem::forget(handler);
+}
 
+fn init_logging() -> Result<(), Box<dyn std::error::Error + 'static>> {
+    let log_file = File::create("./er_menu_mod.log")?;
+    let subscriber =
+        tracing_subscriber::fmt().with_writer(Mutex::new(log_file)).finish();
+    tracing::subscriber::set_global_default(subscriber)?;
+    std::panic::set_hook(Box::new(|panic_info| {
+        tracing::error!("Application panicked: {}", panic_info);
+    }));
     Ok(())
 }
 
