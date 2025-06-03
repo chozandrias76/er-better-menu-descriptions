@@ -90,6 +90,32 @@ impl ImguiRenderLoop for HookGui {
                         let weapon_data: WeaponData = unsafe {
                             std::ptr::read(last_weapon_ptr as *const WeaponData)
                         };
+                        for (category, id, replacement_msg_ptr) in
+                            self.message_replacements.lock().unwrap().iter()
+                        {
+                            let mut message =
+                                replacement_msg_ptr.lock().unwrap();
+                            let weapon_data_name_to_vec_16 = |name: String| {
+                                let mut vec = vec![0u16; 16];
+                                for (i, c) in
+                                    name.encode_utf16().take(16).enumerate()
+                                {
+                                    vec[i] = c;
+                                }
+                                vec
+                            };
+                            let weapon_data_name =
+                                weapon_data_name_to_vec_16(weapon_data.name());
+                            // Put the weapon data name at the beginning of the message
+                            message.extend(weapon_data_name.clone());
+
+                            MsgRepository::replace_msg(
+                                0,
+                                *category as u32,
+                                *id,
+                                std::ptr::NonNull::new(message.as_mut_ptr()),
+                            );
+                        }
 
                         ui.text(format!(
                             "Last Weapon Data {}: {:#}",
@@ -98,21 +124,6 @@ impl ImguiRenderLoop for HookGui {
                         ));
                     } else {
                         ui.text("No last weapon data available.");
-                    }
-                    for (category, id, replacement_msg_ptr) in
-                        self.message_replacements.lock().unwrap().iter()
-                    {
-                        MsgRepository::replace_msg(
-                            0,
-                            *category as u32,
-                            *id,
-                            std::ptr::NonNull::new(
-                                replacement_msg_ptr
-                                    .lock()
-                                    .unwrap()
-                                    .as_mut_ptr(),
-                            ),
-                        );
                     }
                 });
         }

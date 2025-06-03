@@ -330,19 +330,38 @@ fn rax_read_ptr_jump_instructions(
         jump_instruction,
     ))
 }
+struct LimitedList<T>(Vec<T>);
 
+impl<T> LimitedList<T> {
+    const MAX_LENGTH: usize = 0x257;
+    fn new(items: Vec<T>) -> Result<Self, String> {
+        if items.len() > Self::MAX_LENGTH {
+            Err(String::from("List length exceeds limit"))
+        } else {
+            Ok(Self(items))
+        }
+    }
+
+    fn extend(&mut self, items: Vec<T>) {
+        self.0.extend(items);
+        if self.0.len() > Self::MAX_LENGTH {
+            tracing::warn!("List length exceeds limit: {}", self.0.len());
+        }
+    }
+
+    fn as_mut_ptr(&mut self) -> *mut T {
+        self.0.as_mut_ptr()
+    }
+}
 type MessageReplacements =
-    Mutex<Vec<(FmgCategories, u32, Arc<Mutex<Vec<u16>>>)>>;
+    Mutex<Vec<(FmgCategories, u32, Arc<Mutex<LimitedList<u16>>>)>>;
 
 fn create_replacement_message(
     message_replacements: MessageReplacements,
     category: FmgCategories,
     id: u32,
 ) -> MessageReplacements {
-    let replacement_text = r"Yo: We got Dank Memes...
-    
-    
-    ";
+    let replacement_text = r"00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf c0 c1 c2 c3 c4 c5 c6 c7";
     let buffer: Vec<u16> = replacement_text.encode_utf16().collect();
     let buffer_box = buffer.into_boxed_slice();
     let replacement_message_ptr = replacement_message_ptr(buffer_box);
@@ -354,10 +373,19 @@ fn create_replacement_message(
     message_replacements
 }
 
-fn replacement_message_ptr(buffer_box: Box<[u16]>) -> Arc<Mutex<Vec<u16>>> {
+fn replacement_message_ptr(
+    buffer_box: Box<[u16]>,
+) -> Arc<Mutex<LimitedList<u16>>> {
     let replacement_msg_ptr = Box::leak(buffer_box);
+    let vec_msg = replacement_msg_ptr.to_vec();
+    let message = String::from_utf16_lossy(vec_msg.as_slice());
+    let expectation_message =
+        format!("Replacement message exceeds length limit: {:?}", message);
+    let expectation_message = expectation_message.as_str();
+    let limited_list =
+        LimitedList::new(vec_msg.clone()).expect(expectation_message);
 
-    Arc::new(Mutex::new(Vec::from(replacement_msg_ptr)))
+    Arc::new(Mutex::new(limited_list))
 }
 
 mod test {
