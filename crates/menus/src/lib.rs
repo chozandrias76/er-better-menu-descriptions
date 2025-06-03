@@ -3,7 +3,7 @@ mod gui;
 use crash_handler::{
     CrashContext, CrashEventResult, CrashHandler, make_crash_event,
 };
-use file_readers::fmg::FmgCategories;
+use file_readers::fmg::{FmgCategories, FmgDatabases};
 use pelite::pe::PeObject;
 use std::{
     fs::File,
@@ -21,8 +21,6 @@ use windows::Win32::Foundation::HINSTANCE;
 use windows::Win32::System::Memory::{
     MEM_COMMIT, MEM_RESERVE, PAGE_EXECUTE_READWRITE, VirtualAlloc,
 };
-
-const WILD_STRIKES_ID: u32 = 110;
 
 #[derive(Clone, Copy)]
 struct PtrWrapper(*mut u8);
@@ -61,8 +59,11 @@ pub unsafe extern "C" fn DllMain(
     if reason == windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH {
         init_logging_and_crash_handler().unwrap();
         let program: Program<'_> = Program::current();
+        let mut fmg_databases = file_readers::fmg::FmgDatabases::new();
 
-        let message_replacements = setup_message_replacements();
+        let fmg_databases =
+            fmg_databases.read_from_dirs(Some("item_custom-msgbnd-dcx"));
+        let message_replacements = setup_message_replacements(fmg_databases);
 
         std::thread::spawn(move || {
             let (original_instructions, get_weapon_hook, data_address) =
@@ -115,14 +116,10 @@ fn build_gui_instance(
     }
 }
 
-fn setup_message_replacements() -> Arc<MessageReplacements> {
-    let message_replacements: MessageReplacements = Mutex::new(Vec::new());
-
-    let message_replacements = create_replacement_message(
-        message_replacements,
-        FmgCategories::ArtsCaption,
-        WILD_STRIKES_ID,
-    );
+fn setup_message_replacements(
+    fmg_databases: &mut FmgDatabases,
+) -> Arc<MessageReplacements> {
+    let message_replacements = create_replacement_messages(fmg_databases);
     Arc::new(message_replacements)
 }
 
@@ -356,20 +353,38 @@ impl<T> LimitedList<T> {
 type MessageReplacements =
     Mutex<Vec<(FmgCategories, u32, Arc<Mutex<LimitedList<u16>>>)>>;
 
-fn create_replacement_message(
-    message_replacements: MessageReplacements,
-    category: FmgCategories,
-    id: u32,
+fn create_replacement_messages(
+    fmg_databases: &mut FmgDatabases,
 ) -> MessageReplacements {
-    let replacement_text = r"00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf c0 c1 c2 c3 c4 c5 c6 c7";
-    let buffer: Vec<u16> = replacement_text.encode_utf16().collect();
-    let buffer_box = buffer.into_boxed_slice();
-    let replacement_message_ptr = replacement_message_ptr(buffer_box);
-    message_replacements.lock().unwrap().push((
-        category,
-        id,
-        replacement_message_ptr,
-    ));
+    let message_replacements: MessageReplacements = Mutex::new(Vec::new());
+    let category = FmgCategories::ArtsCaption;
+    let fmg = fmg_databases.get_fmg(category);
+    if fmg.is_none() {
+        tracing::warn!("No FMG found for ArtsCaption");
+        return message_replacements;
+    }
+    let fmg = fmg.unwrap();
+    let fmg_entries = fmg.get_entries();
+    for entry in fmg_entries {
+        let replacement_text = &entry.content;
+        let buffer: Vec<u16> = replacement_text.encode_utf16().collect();
+        let buffer_box = buffer.into_boxed_slice();
+        let replacement_message_ptr = replacement_message_ptr(buffer_box);
+        message_replacements.lock().unwrap().push((
+            category,
+            entry.id,
+            replacement_message_ptr,
+        ));
+    }
+    // let replacement_text = r"00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 6f 70 71 72 73 74 75 76 77 78 79 7a 7b 7c 7d 7e 7f 80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f 90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 aa ab ac ad ae af b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 ba bb bc bd be bf c0 c1 c2 c3 c4 c5 c6 c7";
+    // let buffer: Vec<u16> = replacement_text.encode_utf16().collect();
+    // let buffer_box = buffer.into_boxed_slice();
+    // let replacement_message_ptr = replacement_message_ptr(buffer_box);
+    // message_replacements.lock().unwrap().push((
+    //     category,
+    //     id,
+    //     replacement_message_ptr,
+    // ));
     message_replacements
 }
 
@@ -388,19 +403,17 @@ fn replacement_message_ptr(
     Arc::new(Mutex::new(limited_list))
 }
 
+#[cfg(test)]
 mod test {
+    use file_readers::fmg::FmgDatabases;
+
     #[test]
     fn test_create_replacement_message() {
-        let message_replacements = std::sync::Mutex::new(Vec::new());
+        let mut fmg_databases = FmgDatabases::new();
+        let fmg_databases =
+            fmg_databases.read_from_dirs(Some("item_custom-msgbnd-dcx"));
 
-        let category = file_readers::fmg::FmgCategories::ArtsCaption;
-        let id = crate::WILD_STRIKES_ID;
-
-        let result = crate::create_replacement_message(
-            message_replacements,
-            category,
-            id,
-        );
+        let result = crate::create_replacement_messages(fmg_databases);
         assert!(
             !result.lock().unwrap().is_empty(),
             "Message replacements should not be empty"

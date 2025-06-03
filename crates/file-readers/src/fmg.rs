@@ -1,11 +1,10 @@
-use std::str::FromStr;
-
 use std::path::Path;
+use strum_macros::{EnumIter, EnumString};
 
 use serde::{Deserialize, Serialize};
 
 #[allow(dead_code)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, EnumIter, EnumString)]
 pub enum FmgCategories {
     TalkMsg = 1,
     BloodMsg = 2,
@@ -139,23 +138,23 @@ pub enum FmgCategories {
 
 #[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-struct FmgText {
+pub struct FmgText {
     #[serde(rename = "@id")]
-    id: u32,
+    pub id: u32,
     #[serde(rename = "#text")]
-    content: String,
+    pub content: String,
 }
 
 #[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-struct FmgEntries {
+pub struct FmgEntries {
     #[serde(rename = "text")]
     texts: Vec<FmgText>,
 }
 
 #[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-struct Fmg {
+pub struct Fmg {
     filename: String,
     compression: String,
     version: String,
@@ -164,182 +163,21 @@ struct Fmg {
 }
 
 #[allow(dead_code)]
-struct FmgDatabase {
+pub struct FmgDatabase {
     entries: Vec<(FmgCategories, Fmg)>,
 }
 
 #[allow(dead_code)]
-struct FmgDatabases {
-    base: FmgDatabase,
-    dlc01: Option<FmgDatabase>,
-    dlc02: Option<FmgDatabase>,
-    custom: Option<FmgDatabase>,
+pub struct FmgDatabases {
+    pub base: FmgDatabase,
+    pub dlc01: Option<FmgDatabase>,
+    pub dlc02: Option<FmgDatabase>,
+    pub custom: Option<FmgDatabase>,
 }
 
-#[allow(dead_code)]
-impl FromStr for FmgCategories {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "TalkMsg.fmg" => Ok(FmgCategories::TalkMsg),
-            "BloodMsg.fmg" => Ok(FmgCategories::BloodMsg),
-            "MovieSubtitle.fmg" => Ok(FmgCategories::MovieSubtitle),
-            "GoodsName.fmg" => Ok(FmgCategories::GoodsName),
-            "WeaponName.fmg" => Ok(FmgCategories::WeaponName),
-            "ProtectorName.fmg" => Ok(FmgCategories::ProtectorName),
-            "AccessoryName.fmg" => Ok(FmgCategories::AccessoryName),
-            "MagicName.fmg" => Ok(FmgCategories::MagicName),
-            "NpcName.fmg" => Ok(FmgCategories::NpcName),
-            "PlaceName.fmg" => Ok(FmgCategories::PlaceName),
-            "GoodsInfo.fmg" => Ok(FmgCategories::GoodsInfo),
-            "WeaponInfo.fmg" => Ok(FmgCategories::WeaponInfo),
-            "ProtectorInfo.fmg" => Ok(FmgCategories::ProtectorInfo),
-            "AccessoryInfo.fmg" => Ok(FmgCategories::AccessoryInfo),
-            "GoodsCaption.fmg" => Ok(FmgCategories::GoodsCaption),
-            "WeaponCaption.fmg" => Ok(FmgCategories::WeaponCaption),
-            "ProtectorCaption.fmg" => Ok(FmgCategories::ProtectorCaption),
-            "AccessoryCaption.fmg" => Ok(FmgCategories::AccessoryCaption),
-            "MagicInfo.fmg" => Ok(FmgCategories::MagicInfo),
-            "MagicCaption.fmg" => Ok(FmgCategories::MagicCaption),
-            "NetworkMessage.fmg" => Ok(FmgCategories::NetworkMessage),
-            "ActionButtonText.fmg" => Ok(FmgCategories::ActionButtonText),
-            "EventTextForTalk.fmg" => Ok(FmgCategories::EventTextForTalk),
-            "EventTextForMap.fmg" => Ok(FmgCategories::EventTextForMap),
-            "GemName.fmg" => Ok(FmgCategories::GemName),
-            "GemInfo.fmg" => Ok(FmgCategories::GemInfo),
-            "GemCaption.fmg" => Ok(FmgCategories::GemCaption),
-            "GoodsDialog.fmg" => Ok(FmgCategories::GoodsDialog),
-            "ArtsName.fmg" => Ok(FmgCategories::ArtsName),
-            "ArtsCaption.fmg" => Ok(FmgCategories::ArtsCaption),
-            "WeaponEffect.fmg" => Ok(FmgCategories::WeaponEffect),
-            "GemEffect.fmg" => Ok(FmgCategories::GemEffect),
-            "GoodsInfo2.fmg" => Ok(FmgCategories::GoodsInfo2),
-            "GrMenuText.fmg" => Ok(FmgCategories::GrMenuText),
-            "GrLineHelp.fmg" => Ok(FmgCategories::GrLineHelp),
-            "GrKeyGuide.fmg" => Ok(FmgCategories::GrKeyGuide),
-            "GrSystemMessageWin64.fmg" => {
-                Ok(FmgCategories::GrSystemMessageWin64)
-            }
-            "GrDialogues.fmg" => Ok(FmgCategories::GrDialogues),
-            "LoadingTitle.fmg" => Ok(FmgCategories::LoadingTitle),
-            "LoadingText.fmg" => Ok(FmgCategories::LoadingText),
-            "TutorialTitle.fmg" => Ok(FmgCategories::TutorialTitle),
-            "TutorialBody.fmg" => Ok(FmgCategories::TutorialBody),
-            "TextEmbedImageNameWin64.fmg" => {
-                Ok(FmgCategories::TextEmbedImageNameWin64)
-            }
-            "ToSWin64.fmg" => Ok(FmgCategories::ToSWin64),
-            "WeaponNameDlc01.fmg" => Ok(FmgCategories::WeaponNameDlc01),
-            "WeaponInfoDlc01.fmg" => Ok(FmgCategories::WeaponInfoDlc01),
-            "WeaponCaptionDlc01.fmg" => Ok(FmgCategories::WeaponCaptionDlc01),
-            "ProtectorNameDlc01.fmg" => Ok(FmgCategories::ProtectorNameDlc01),
-            "ProtectorInfoDlc01.fmg" => Ok(FmgCategories::ProtectorInfoDlc01),
-            "ProtectorCaptionDlc01.fmg" => {
-                Ok(FmgCategories::ProtectorCaptionDlc01)
-            }
-            "AccessoryNameDlc01.fmg" => Ok(FmgCategories::AccessoryNameDlc01),
-            "AccessoryInfoDlc01.fmg" => Ok(FmgCategories::AccessoryInfoDlc01),
-            "AccessoryCaptionDlc01.fmg" => {
-                Ok(FmgCategories::AccessoryCaptionDlc01)
-            }
-            "GoodsNameDlc01.fmg" => Ok(FmgCategories::GoodsNameDlc01),
-            "GoodsInfoDlc01.fmg" => Ok(FmgCategories::GoodsInfoDlc01),
-            "GoodsCaptionDlc01.fmg" => Ok(FmgCategories::GoodsCaptionDlc01),
-            "GemNameDlc01.fmg" => Ok(FmgCategories::GemNameDlc01),
-            "GemInfoDlc01.fmg" => Ok(FmgCategories::GemInfoDlc01),
-            "GemCaptionDlc01.fmg" => Ok(FmgCategories::GemCaptionDlc01),
-            "MagicNameDlc01.fmg" => Ok(FmgCategories::MagicNameDlc01),
-            "MagicInfoDlc01.fmg" => Ok(FmgCategories::MagicInfoDlc01),
-            "MagicCaptionDlc01.fmg" => Ok(FmgCategories::MagicCaptionDlc01),
-            "NpcNameDlc01.fmg" => Ok(FmgCategories::NpcNameDlc01),
-            "PlaceNameDlc01.fmg" => Ok(FmgCategories::PlaceNameDlc01),
-            "GoodsDialogDlc01.fmg" => Ok(FmgCategories::GoodsDialogDlc01),
-            "ArtsNameDlc01.fmg" => Ok(FmgCategories::ArtsNameDlc01),
-            "ArtsCaptionDlc01.fmg" => Ok(FmgCategories::ArtsCaptionDlc01),
-            "WeaponEffectDlc01.fmg" => Ok(FmgCategories::WeaponEffectDlc01),
-            "GemEffectDlc01.fmg" => Ok(FmgCategories::GemEffectDlc01),
-            "GoodsInfo2Dlc01.fmg" => Ok(FmgCategories::GoodsInfo2Dlc01),
-            "TalkMsgDlc01.fmg" => Ok(FmgCategories::TalkMsgDlc01),
-            "BloodMsgDlc01.fmg" => Ok(FmgCategories::BloodMsgDlc01),
-            "MovieSubtitleDlc01.fmg" => Ok(FmgCategories::MovieSubtitleDlc01),
-            "NetworkMessageDlc01.fmg" => Ok(FmgCategories::NetworkMessageDlc01),
-            "ActionButtonTextDlc01.fmg" => {
-                Ok(FmgCategories::ActionButtonTextDlc01)
-            }
-            "EventTextForTalkDlc01.fmg" => {
-                Ok(FmgCategories::EventTextForTalkDlc01)
-            }
-            "EventTextForMapDlc01.fmg" => {
-                Ok(FmgCategories::EventTextForMapDlc01)
-            }
-            "GrMenuTextDlc01.fmg" => Ok(FmgCategories::GrMenuTextDlc01),
-            "GrLineHelpDlc01.fmg" => Ok(FmgCategories::GrLineHelpDlc01),
-            "GrKeyGuideDlc01.fmg" => Ok(FmgCategories::GrKeyGuideDlc01),
-            "GrSystemMessageWin64Dlc01.fmg" => {
-                Ok(FmgCategories::GrSystemMessageWin64Dlc01)
-            }
-            "GrDialoguesDlc01.fmg" => Ok(FmgCategories::GrDialoguesDlc01),
-            "LoadingTitleDlc01.fmg" => Ok(FmgCategories::LoadingTitleDlc01),
-            "LoadingTextDlc01.fmg" => Ok(FmgCategories::LoadingTextDlc01),
-            "TutorialTitleDlc01.fmg" => Ok(FmgCategories::TutorialTitleDlc01),
-            "TutorialBodyDlc01.fmg" => Ok(FmgCategories::TutorialBodyDlc01),
-            "WeaponNameDlc02.fmg" => Ok(FmgCategories::WeaponNameDlc02),
-            "WeaponInfoDlc02.fmg" => Ok(FmgCategories::WeaponInfoDlc02),
-            "WeaponCaptionDlc02.fmg" => Ok(FmgCategories::WeaponCaptionDlc02),
-            "ProtectorNameDlc02.fmg" => Ok(FmgCategories::ProtectorNameDlc02),
-            "ProtectorInfoDlc02.fmg" => Ok(FmgCategories::ProtectorInfoDlc02),
-            "ProtectorCaptionDlc02.fmg" => {
-                Ok(FmgCategories::ProtectorCaptionDlc02)
-            }
-            "AccessoryNameDlc02.fmg" => Ok(FmgCategories::AccessoryNameDlc02),
-            "AccessoryInfoDlc02.fmg" => Ok(FmgCategories::AccessoryInfoDlc02),
-            "AccessoryCaptionDlc02.fmg" => {
-                Ok(FmgCategories::AccessoryCaptionDlc02)
-            }
-            "GoodsNameDlc02.fmg" => Ok(FmgCategories::GoodsNameDlc02),
-            "GoodsInfoDlc02.fmg" => Ok(FmgCategories::GoodsInfoDlc02),
-            "GoodsCaptionDlc02.fmg" => Ok(FmgCategories::GoodsCaptionDlc02),
-            "GemNameDlc02.fmg" => Ok(FmgCategories::GemNameDlc02),
-            "GemInfoDlc02.fmg" => Ok(FmgCategories::GemInfoDlc02),
-            "GemCaptionDlc02.fmg" => Ok(FmgCategories::GemCaptionDlc02),
-            "MagicNameDlc02.fmg" => Ok(FmgCategories::MagicNameDlc02),
-            "MagicInfoDlc02.fmg" => Ok(FmgCategories::MagicInfoDlc02),
-            "MagicCaptionDlc02.fmg" => Ok(FmgCategories::MagicCaptionDlc02),
-            "NpcNameDlc02.fmg" => Ok(FmgCategories::NpcNameDlc02),
-            "PlaceNameDlc02.fmg" => Ok(FmgCategories::PlaceNameDlc02),
-            "GoodsDialogDlc02.fmg" => Ok(FmgCategories::GoodsDialogDlc02),
-            "ArtsNameDlc02.fmg" => Ok(FmgCategories::ArtsNameDlc02),
-            "ArtsCaptionDlc02.fmg" => Ok(FmgCategories::ArtsCaptionDlc02),
-            "WeaponEffectDlc02.fmg" => Ok(FmgCategories::WeaponEffectDlc02),
-            "GemEffectDlc02.fmg" => Ok(FmgCategories::GemEffectDlc02),
-            "GoodsInfo2Dlc02.fmg" => Ok(FmgCategories::GoodsInfo2Dlc02),
-            "TalkMsgDlc02.fmg" => Ok(FmgCategories::TalkMsgDlc02),
-            "BloodMsgDlc02.fmg" => Ok(FmgCategories::BloodMsgDlc02),
-            "MovieSubtitleDlc02.fmg" => Ok(FmgCategories::MovieSubtitleDlc02),
-            "NetworkMessageDlc02.fmg" => Ok(FmgCategories::NetworkMessageDlc02),
-            "ActionButtonTextDlc02.fmg" => {
-                Ok(FmgCategories::ActionButtonTextDlc02)
-            }
-            "EventTextForTalkDlc02.fmg" => {
-                Ok(FmgCategories::EventTextForTalkDlc02)
-            }
-            "EventTextForMapDlc02.fmg" => {
-                Ok(FmgCategories::EventTextForMapDlc02)
-            }
-            "GrMenuTextDlc02.fmg" => Ok(FmgCategories::GrMenuTextDlc02),
-            "GrLineHelpDlc02.fmg" => Ok(FmgCategories::GrLineHelpDlc02),
-            "GrKeyGuideDlc02.fmg" => Ok(FmgCategories::GrKeyGuideDlc02),
-            "GrSystemMessageWin64Dlc02.fmg" => {
-                Ok(FmgCategories::GrSystemMessageWin64Dlc02)
-            }
-            "GrDialoguesDlc02.fmg" => Ok(FmgCategories::GrDialoguesDlc02),
-            "LoadingTitleDlc02.fmg" => Ok(FmgCategories::LoadingTitleDlc02),
-            "LoadingTextDlc02.fmg" => Ok(FmgCategories::LoadingTextDlc02),
-            "TutorialTitleDlc02.fmg" => Ok(FmgCategories::TutorialTitleDlc02),
-            "TutorialBodyDlc02.fmg" => Ok(FmgCategories::TutorialBodyDlc02),
-            _ => Err(()),
-        }
+impl Default for FmgDatabases {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -347,6 +185,10 @@ impl FromStr for FmgCategories {
 impl Fmg {
     pub fn get_entry(&self, id: u32) -> Option<&FmgText> {
         self.entries.texts.iter().find(|text| text.id == id)
+    }
+
+    pub fn get_entries(&self) -> &Vec<FmgText> {
+        &self.entries.texts
     }
 }
 
@@ -364,13 +206,39 @@ impl FmgDatabases {
     }
 
     pub fn get_fmg(&self, category: FmgCategories) -> Option<&Fmg> {
-        self.base.entries.iter().find_map(|(cat, fmg)| {
-            if *cat == category {
-                Some(fmg)
-            } else {
-                None
+        // Prefer custom, then dlc02, then dlc01, and finally base
+        if let Some(custom) = &self.custom {
+            if let Some(fmg) = custom
+                .entries
+                .iter()
+                .find_map(|(cat, fmg)| get_fmg_by_category(category, cat, fmg))
+            {
+                return Some(fmg);
             }
-        })
+        }
+        if let Some(dlc02) = &self.dlc02 {
+            if let Some(fmg) = dlc02
+                .entries
+                .iter()
+                .find_map(|(cat, fmg)| get_fmg_by_category(category, cat, fmg))
+            {
+                return Some(fmg);
+            }
+        }
+        if let Some(dlc01) = &self.dlc01 {
+            if let Some(fmg) = dlc01
+                .entries
+                .iter()
+                .find_map(|(cat, fmg)| get_fmg_by_category(category, cat, fmg))
+            {
+                return Some(fmg);
+            }
+        }
+
+        self.base
+            .entries
+            .iter()
+            .find_map(|(cat, fmg)| get_fmg_by_category(category, cat, fmg))
     }
 
     pub fn read_from_dirs(
@@ -424,8 +292,13 @@ impl FmgDatabases {
                             serde_xml_rs::from_str::<Fmg>(&xml_content)
                         {
                             // Use the filename to determine the category
-                            let category = fmg
-                                .filename
+                            let filename = fmg.filename.clone();
+                            // Strip the ".fmg" extension
+                            let filename = filename
+                                .strip_suffix(".fmg")
+                                .unwrap_or(&filename)
+                                .to_string();
+                            let category = filename
                                 .parse::<FmgCategories>()
                                 .unwrap_or(FmgCategories::GoodsName);
                             database.entries.push((category, fmg));
@@ -442,6 +315,18 @@ impl FmgDatabases {
         if !self.base.entries.contains(&(category, fmg.clone())) {
             self.base.entries.push((category, fmg));
         }
+    }
+}
+
+fn get_fmg_by_category<'a>(
+    category: FmgCategories,
+    cat: &'a FmgCategories,
+    fmg: &'a Fmg,
+) -> Option<&'a Fmg> {
+    if *cat == category {
+        Some(fmg)
+    } else {
+        None
     }
 }
 

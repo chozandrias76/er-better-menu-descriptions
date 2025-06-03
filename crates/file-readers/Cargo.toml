@@ -13,3 +13,5 @@ serde = {version = "*" }
 serde_json = "*"
 serde-xml-rs = "0.8.1"
 quick-xml = {version = "0.37.5", features = ["serde", "serde-types", "serialize"]}
+strum.workspace = true
+strum_macros.workspace = true
