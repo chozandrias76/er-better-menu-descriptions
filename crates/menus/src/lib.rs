@@ -1,9 +1,9 @@
-mod fmg;
 mod gui;
 
 use crash_handler::{
     CrashContext, CrashEventResult, CrashHandler, make_crash_event,
 };
+use file_readers::fmg::FmgCategories;
 use pelite::pe::PeObject;
 use std::{
     fs::File,
@@ -14,7 +14,7 @@ use std::{
 use crate::gui::HookGui;
 
 use eldenring_util::{program::Program, system::wait_for_system_init};
-use fmg::FmgCategories;
+
 use hudhook::hooks::dx12::ImguiDx12Hooks;
 use last_weapon::retour::record_rax_trampoline_data_with_data_ptr;
 use windows::Win32::Foundation::HINSTANCE;
@@ -392,7 +392,8 @@ mod test {
     #[test]
     fn test_create_replacement_message() {
         let message_replacements = std::sync::Mutex::new(Vec::new());
-        let category = crate::fmg::FmgCategories::ArtsCaption;
+
+        let category = file_readers::fmg::FmgCategories::ArtsCaption;
         let id = crate::WILD_STRIKES_ID;
 
         let result = crate::create_replacement_message(

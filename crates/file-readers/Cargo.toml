@@ -5,7 +5,11 @@ edition.workspace = true
 license.workspace = true
 readme = false
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 serde = {version = "*" }
 serde_json = "*"
+serde-xml-rs = "0.8.1"
 quick-xml = {version = "0.37.5", features = ["serde", "serde-types", "serialize"]}

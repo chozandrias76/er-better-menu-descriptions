@@ -85,7 +85,7 @@ mod test {
         let instruction = Instruction::default();
         let output_bytes = Vec::with_capacity(vec_bytes.len() + 1);
         decode_bytes(
-            &vec_bytes.as_slice(),
+            vec_bytes.as_slice(),
             decoder,
             formatter,
             output,
